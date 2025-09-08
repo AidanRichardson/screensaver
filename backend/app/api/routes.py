@@ -4,7 +4,24 @@ import json
 
 router = APIRouter()
 
-# Get widgets for a screen
+@router.get("/screens")
+@router.get("/screens")
+def get_screens(
+    user_id: str = Query("local"),
+    db=Depends(get_db)
+):
+    cur = db.cursor()
+    cur.execute(
+        "SELECT screen_id FROM screens WHERE user_id=? ORDER BY screen_id",
+        (user_id,)
+    )
+    rows = cur.fetchall()
+    if not rows:
+        return {"screens": []}
+    return {"screens": [row["screen_id"] for row in rows]}
+
+
+
 @router.get("/screens/{screen_id}")
 def get_screen(
     screen_id: int,

@@ -9,9 +9,14 @@ import WeatherWidget from "./widgets/WeatherWidget";
 interface Props {
   widgets: WidgetConfig[];
   onWidgetsChange: (widgets: WidgetConfig[]) => void;
+  editing: boolean;
 }
 
-const GridLayoutWrapper: React.FC<Props> = ({ widgets, onWidgetsChange }) => {
+const GridLayoutWrapper: React.FC<Props> = ({
+  widgets,
+  onWidgetsChange,
+  editing,
+}) => {
   const handleLayoutChange = (layout: Layout[]) => {
     const updated = widgets.map((widget) => {
       const l = layout.find((item) => item.i === widget.id);
@@ -41,7 +46,7 @@ const GridLayoutWrapper: React.FC<Props> = ({ widgets, onWidgetsChange }) => {
         onLayoutChange={handleLayoutChange}
       >
         {widgets.map((widget) => (
-          <div key={widget.id} data-grid={widget}>
+          <div key={widget.id} data-grid={{ ...widget, static: !editing }}>
             <WidgetFrame title={widget.type}>
               {renderWidget(widget)}
             </WidgetFrame>
