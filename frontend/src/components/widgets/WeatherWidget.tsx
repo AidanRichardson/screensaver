@@ -2,9 +2,9 @@ import React from "react";
 
 const WeatherWidget: React.FC = () => {
   return (
-    <div>
-      <p className="text-lg">🌤️ 21°C</p>
-      <p className="text-sm text-gray-500">London</p>
+    <div className="text-8xl text-white font-bold font-asimovian">
+      <p>🌤️</p>
+      <p>21°C</p>
     </div>
   );
 };
