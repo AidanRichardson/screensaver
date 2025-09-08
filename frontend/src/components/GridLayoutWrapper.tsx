@@ -25,6 +25,10 @@ const GridLayoutWrapper: React.FC<Props> = ({
     onWidgetsChange(updated);
   };
 
+  const handleDelete = (id: string) => {
+    onWidgetsChange(widgets.filter((w) => w.id !== id));
+  };
+
   const renderWidget = (widget: WidgetConfig) => {
     switch (widget.type) {
       case "clock":
@@ -44,12 +48,32 @@ const GridLayoutWrapper: React.FC<Props> = ({
         rowHeight={30}
         width={1500}
         onLayoutChange={handleLayoutChange}
+        isDraggable={editing}
+        isResizable={editing}
+        draggableCancel=".no-drag"
       >
         {widgets.map((widget) => (
           <div key={widget.id} data-grid={{ ...widget, static: !editing }}>
-            <WidgetFrame title={widget.type}>
-              {renderWidget(widget)}
-            </WidgetFrame>
+            <div className="relative group w-full h-full">
+              {editing && (
+                <button
+                  type="button"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(widget.id);
+                  }}
+                  className="no-drag absolute top-2 right-2 z-10 bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition"
+                >
+                  ✖
+                </button>
+              )}
+
+              <WidgetFrame title={widget.type}>
+                {renderWidget(widget)}
+              </WidgetFrame>
+            </div>
           </div>
         ))}
       </GridLayout>
