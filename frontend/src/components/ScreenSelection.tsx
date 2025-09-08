@@ -60,7 +60,7 @@ const ScreenSelection: React.FC<Props> = ({
         editing ? "flex" : "hidden"
       } flex-row flex-wrap items-center gap-3 my-4`}
     >
-      <div className="flex flex-row flex-wrap items-center gap-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-xl shadow-sm">
+      <div className="flex flex-row flex-wrap items-center gap-2 dark:bg-gray-800 p-2 rounded-xl shadow-sm">
         {screens.map((screenId) => (
           <button
             key={screenId}

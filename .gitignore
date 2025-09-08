@@ -1,5 +1,5 @@
 *.db
-
+*.mp4
 # Logs
 logs
 *.log

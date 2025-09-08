@@ -8,7 +8,11 @@ const ClockWidget: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  return <div className="text-xl">{time.toLocaleTimeString()}</div>;
+  return (
+    <div className="text-9xl text-white font-bold font-asimovian">
+      {time.toLocaleTimeString()}
+    </div>
+  );
 };
 
 export default ClockWidget;

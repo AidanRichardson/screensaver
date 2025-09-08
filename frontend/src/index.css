@@ -1,1 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Asimovian&display=swap");
 @import "tailwindcss";
+
+.font-asimovian {
+  font-family: "Asimovian", sans-serif;
+}

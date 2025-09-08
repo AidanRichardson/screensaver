@@ -4,6 +4,9 @@ import ScreenSelection from "./components/ScreenSelection";
 import WidgetModal from "./components/WidgetModal";
 import type { WidgetConfig } from "./types/widget";
 
+// If bg.mp4 is in src/assets:
+import bgVideo from "./assets/bg.mp4";
+
 const API_BASE = "/api/screens";
 
 function App() {
@@ -11,6 +14,7 @@ function App() {
   const [currentScreen, setCurrentScreen] = useState(1);
   const [widgets, setWidgets] = useState<WidgetConfig[]>();
   const [showWidgetModal, setShowWidgetModal] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const fetchWidgets = async () => {
@@ -27,6 +31,20 @@ function App() {
 
     fetchWidgets();
   }, [currentScreen]);
+
+  useEffect(() => {
+    const handleChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleChange);
+    return () => document.removeEventListener("fullscreenchange", handleChange);
+  }, []);
+
+  const goFullscreen = () => {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    }
+  };
 
   // Save user edit
   const handleEdit = async () => {
@@ -46,55 +64,88 @@ function App() {
   };
 
   return (
-    <>
-      <ScreenSelection
-        currentScreen={currentScreen}
-        editing={editing}
-        setWidgets={setWidgets}
-        setCurrentScreen={setCurrentScreen}
-      />
-
-      <>
-        <button
-          onClick={handleEdit}
-          className={`${
-            editing
-              ? "bg-green-500 hover:bg-green-700"
-              : "bg-red-500 hover:bg-red-700"
-          } text-white font-bold py-2 px-4 rounded`}
-        >
-          {editing ? "Save" : "Edit"}
-        </button>
-
-        {editing ? (
-          <button
-            onClick={() => setShowWidgetModal(true)}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
-          >
-            Add Widget
-          </button>
-        ) : null}
-
-        <WidgetModal
-          open={showWidgetModal}
-          onClose={() => setShowWidgetModal(false)}
-          widgets={widgets || []}
-          updateWidgets={setWidgets}
-        />
-
-        <div className="w-screen h-screen bg-gray-100 p-4">
-          {!widgets ? (
-            <div></div>
-          ) : (
-            <GridLayoutWrapper
-              widgets={widgets}
-              onWidgetsChange={setWidgets}
-              editing={editing}
-            />
+    <div className="relative min-h-screen flex flex-col">
+      {/* Edit and Fullscreen button */}
+      {!editing && (
+        <div className="fixed top-2 left-2 z-50 flex gap-2">
+          {!isFullscreen && (
+            <button
+              onClick={goFullscreen}
+              className="px-3 py-1 text-sm rounded bg-gray-700 hover:bg-gray-900 text-white shadow"
+            >
+              Fullscreen
+            </button>
+          )}
+          {!isFullscreen && (
+            <button
+              onClick={handleEdit}
+              className="px-3 py-1 text-sm font-bold rounded bg-red-500 hover:bg-red-700 text-white shadow"
+            >
+              Edit
+            </button>
           )}
         </div>
-      </>
-    </>
+      )}
+
+      {/* Background video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="fixed inset-0 w-full h-full object-cover -z-10"
+      >
+        <source src={bgVideo} type="video/mp4" />
+      </video>
+
+      {/* Navigation bar (appears when editing) */}
+      {editing && (
+        <div className="w-full bg-gray-800 text-white shadow-md z-40">
+          <div className="max-w-screen-xl mx-auto px-4 py-3 flex items-center gap-4">
+            {/* Save/Exit Edit */}
+
+            {/* Screen selector */}
+            <ScreenSelection
+              currentScreen={currentScreen}
+              editing={editing}
+              setWidgets={setWidgets}
+              setCurrentScreen={setCurrentScreen}
+            />
+
+            <button
+              onClick={() => setShowWidgetModal(true)}
+              className="px-3 py-1 rounded bg-blue-500 hover:bg-blue-600 text-sm font-bold"
+            >
+              Add Widget
+            </button>
+            <button
+              onClick={handleEdit}
+              className="px-3 py-1 rounded bg-green-500 hover:bg-green-600 text-sm font-bold"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      )}
+
+      <WidgetModal
+        open={showWidgetModal}
+        onClose={() => setShowWidgetModal(false)}
+        widgets={widgets || []}
+        updateWidgets={setWidgets}
+      />
+
+      {/* Main content*/}
+      <main className="flex-1 p-4">
+        {widgets && (
+          <GridLayoutWrapper
+            widgets={widgets}
+            onWidgetsChange={setWidgets}
+            editing={editing}
+          />
+        )}
+      </main>
+    </div>
   );
 }
 

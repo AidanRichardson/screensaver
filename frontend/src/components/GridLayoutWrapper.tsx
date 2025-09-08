@@ -41,7 +41,7 @@ const GridLayoutWrapper: React.FC<Props> = ({
   };
 
   return (
-    <div className="w-screen h-screen bg-gray-100 p-4">
+    <div className="w-screen h-screen">
       <GridLayout
         className="layout"
         cols={14}
@@ -70,7 +70,7 @@ const GridLayoutWrapper: React.FC<Props> = ({
                 </button>
               )}
 
-              <WidgetFrame title={widget.type}>
+              <WidgetFrame editing={editing}>
                 {renderWidget(widget)}
               </WidgetFrame>
             </div>
