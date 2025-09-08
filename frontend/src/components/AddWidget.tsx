@@ -6,7 +6,7 @@ interface Props {
   updateWidgets: (widgets: WidgetConfig[]) => void;
 }
 
-const WidgetFrame: React.FC<Props> = ({ widgets, updateWidgets }) => {
+const AddWidget: React.FC<Props> = ({ widgets, updateWidgets }) => {
   const onClick = () => {
     const widget: WidgetConfig = {
       id: String(Date.now()),
@@ -30,4 +30,4 @@ const WidgetFrame: React.FC<Props> = ({ widgets, updateWidgets }) => {
   );
 };
 
-export default WidgetFrame;
+export default AddWidget;
