@@ -50,7 +50,7 @@ const WidgetModal: React.FC<WidgetModalProps> = ({
                 widgets={widgets}
                 updateWidgets={updateWidgets}
                 OnClose={onClose}
-              ></AddWidget>
+              />
             ))}
           </div>
         ) : (

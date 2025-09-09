@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const ClockWidget: React.FC = () => {
+const ClockWidget: React.FC<{ scale: number }> = ({ scale }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -8,8 +8,14 @@ const ClockWidget: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const fontSize = {
+    1: "text-3xl",
+    2: "text-6xl",
+    3: "text-9xl",
+  }[scale];
+
   return (
-    <div className="text-9xl text-white font-bold font-asimovian">
+    <div className={`text-white font-bold font-asimovian ${fontSize}`}>
       {time.toLocaleTimeString()}
     </div>
   );

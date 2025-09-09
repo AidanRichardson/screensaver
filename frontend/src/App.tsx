@@ -64,7 +64,7 @@ function App() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col">
+    <div className="relative w-screen h-screen overflow-hidden flex flex-col">
       {/* Edit and Fullscreen button */}
       {!editing && (
         <div className="fixed top-2 left-2 z-50 flex gap-2">
@@ -136,7 +136,7 @@ function App() {
       />
 
       {/* Main content*/}
-      <main className="flex-1 p-4">
+      <main className="flex-1">
         {widgets && (
           <GridLayoutWrapper
             widgets={widgets}

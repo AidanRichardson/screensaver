@@ -1,10 +1,12 @@
 import React from "react";
-import GridLayout, { Layout } from "react-grid-layout";
+import GridLayout, { Layout, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
-import type { WidgetConfig } from "../types/widget";
+import { baseWidgetSizes, type WidgetConfig } from "../types/widget";
 import WidgetFrame from "./WidgetFrame";
 import ClockWidget from "./widgets/ClockWidget";
 import WeatherWidget from "./widgets/WeatherWidget";
+
+const ResponsiveGridLayout = WidthProvider(GridLayout);
 
 interface Props {
   widgets: WidgetConfig[];
@@ -32,51 +34,57 @@ const GridLayoutWrapper: React.FC<Props> = ({
   const renderWidget = (widget: WidgetConfig) => {
     switch (widget.type) {
       case "clock":
-        return <ClockWidget />;
+        return <ClockWidget scale={widget.scale} />;
       case "weather":
-        return <WeatherWidget />;
+        return <WeatherWidget scale={widget.scale} />;
       default:
         return <div>Unknown widget</div>;
     }
   };
 
   return (
-    <div className="w-screen h-screen">
-      <GridLayout
+    <div className="w-full h-full">
+      <ResponsiveGridLayout
         className="layout"
         cols={14}
         rowHeight={30}
-        width={1500}
         onLayoutChange={handleLayoutChange}
         isDraggable={editing}
-        isResizable={editing}
+        isResizable={false}
         draggableCancel=".no-drag"
+        autoSize={true}
+        compactType={null}
       >
-        {widgets.map((widget) => (
-          <div key={widget.id} data-grid={{ ...widget, static: !editing }}>
-            <div className="relative group w-full h-full">
-              {editing && (
-                <button
-                  type="button"
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onTouchStart={(e) => e.stopPropagation()}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(widget.id);
-                  }}
-                  className="no-drag absolute top-2 right-2 z-10 bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition"
-                >
-                  ✖
-                </button>
-              )}
+        {widgets.map((widget) => {
+          const base = baseWidgetSizes[widget.type];
+          const scale = widget.scale ?? 1;
 
-              <WidgetFrame editing={editing}>
-                {renderWidget(widget)}
-              </WidgetFrame>
+          const w = base.w * scale;
+          const h = base.h * scale;
+
+          return (
+            <div
+              key={widget.id}
+              data-grid={{ ...widget, w, h, static: !editing }}
+            >
+              <div className="relative group w-full h-full">
+                {editing && (
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(widget.id)}
+                    className="no-drag absolute top-2 right-2 z-10 bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition"
+                  >
+                    ✖
+                  </button>
+                )}
+                <WidgetFrame editing={editing}>
+                  {renderWidget(widget)}
+                </WidgetFrame>
+              </div>
             </div>
-          </div>
-        ))}
-      </GridLayout>
+          );
+        })}
+      </ResponsiveGridLayout>
     </div>
   );
 };

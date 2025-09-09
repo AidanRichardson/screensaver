@@ -6,18 +6,19 @@ interface Props {
 }
 
 const WidgetFrame: React.FC<Props> = ({ editing, children }) => {
+  const base = "w-full h-full flex items-center justify-center";
+
   if (editing) {
     return (
-      <div className="rounded-xl shadow-md p-2 h-full w-full text-center border border-amber-50">
-        <div>{children}</div>
+      <div
+        className={`${base} rounded-xl shadow-md p-2 bg-black/30 text-center border border-amber-50`}
+      >
+        {children}
       </div>
     );
   }
-  return (
-    <div className="text-center">
-      <div>{children}</div>
-    </div>
-  );
+
+  return <div className={base}>{children}</div>;
 };
 
 export default WidgetFrame;
