@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import type { WidgetConfig, WidgetScale } from "../types/widget";
-import ClockWidget from "./widgets/ClockWidget";
-import WeatherWidget from "./widgets/WeatherWidget";
+import WidgetRenderer from "./WidgetRenderer";
 
 interface Props {
   widgetDetails: WidgetConfig;
@@ -17,7 +16,6 @@ const AddWidget: React.FC<Props> = ({
   OnClose,
 }) => {
   const [scale, setScale] = useState<WidgetScale>(1);
-  const [colour, setColour] = useState("white");
 
   const onClick = () => {
     updateWidgets([
@@ -29,41 +27,22 @@ const AddWidget: React.FC<Props> = ({
         customisation: {
           ...widgetDetails.customisation,
           scale,
-          colour,
+          colour: "white",
         },
       },
     ]);
     OnClose();
   };
 
-  const renderPreview = () => {
-    switch (widgetDetails.type) {
-      case "clock":
-        return (
-          <div className="flex items-center justify-center h-20">
-            <ClockWidget {...widgetDetails.customisation} />
-          </div>
-        );
-      case "weather":
-        return (
-          <div className="flex items-center justify-center h-20">
-            <WeatherWidget scale={1} />
-          </div>
-        );
-      default:
-        return (
-          <div className="flex items-center justify-center h-20 text-gray-500">
-            Preview not available
-          </div>
-        );
-    }
-  };
-
   return (
     <>
       <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col">
         {/* Preview */}
-        <div className="mb-3">{renderPreview()}</div>
+        <div className="mb-3">
+          <div className="flex items-center justify-center h-20">
+            <WidgetRenderer widget={widgetDetails} />
+          </div>
+        </div>
 
         {/* Name */}
         <p className="text-lg font-medium text-gray-700 dark:text-gray-200 mb-2">
@@ -80,15 +59,6 @@ const AddWidget: React.FC<Props> = ({
           <option value={1}>Small</option>
           <option value={2}>Medium</option>
           <option value={3}>Large</option>
-        </select>
-
-        <select
-          value={colour}
-          onChange={(e) => setColour(e.target.value)}
-          className="mb-3 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 px-2 py-1 text-sm"
-        >
-          <option value={"white"}>white</option>
-          <option value={"black"}>black</option>
         </select>
 
         <button

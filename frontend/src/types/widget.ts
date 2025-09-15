@@ -1,4 +1,5 @@
-export type WidgetType = "clock" | "weather" | "spotify";
+import { widgetRegistry } from "../components/widgets";
+
 export type WidgetScale = 1 | 2 | 3;
 
 export interface WidgetCustomisation {
@@ -8,7 +9,7 @@ export interface WidgetCustomisation {
 
 export interface WidgetConfig {
   id: string;
-  type: WidgetType;
+  type: string;
   customisation: WidgetCustomisation;
   x: number;
   y: number;
@@ -17,14 +18,13 @@ export interface WidgetConfig {
   minH?: number;
 }
 
-export const baseWidgetSizes: Record<WidgetType, { w: number; h: number }> = {
-  clock: { w: 2, h: 1 },
-  weather: { w: 1, h: 2 },
-  spotify: { w: 4, h: 2 },
-};
-
-export const availableWidgets: WidgetConfig[] = [
-  { id: "1", type: "clock", scale: 1, x: 0, y: 0 },
-  { id: "2", type: "weather", scale: 1, x: 0, y: 0 },
-  { id: "3", type: "spotify", scale: 1, x: 0, y: 0 },
-];
+export const availableWidgets = Object.entries(widgetRegistry).map(
+  ([type, { defaultSize, defaultCustomisation }], idx) => ({
+    id: String(idx + 1),
+    type,
+    customisation: defaultCustomisation,
+    x: 0,
+    y: 0,
+    ...defaultSize,
+  })
+);

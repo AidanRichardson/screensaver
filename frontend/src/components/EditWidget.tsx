@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import type { WidgetConfig, WidgetScale } from "../types/widget";
-import ClockWidget from "./widgets/ClockWidget";
-import WeatherWidget from "./widgets/WeatherWidget";
+import WidgetRenderer from "./WidgetRenderer";
 
 interface Props {
   widget: WidgetConfig;
@@ -40,29 +39,6 @@ const EditWidget: React.FC<Props> = ({
   const handleDelete = () => {
     updateWidgets(widgets.filter((w) => w.id !== widget.id));
     OnClose();
-  };
-
-  const renderPreview = () => {
-    switch (widget.type) {
-      case "clock":
-        return (
-          <div className="flex items-center justify-center h-40">
-            <ClockWidget {...widget.customisation} scale={2} colour={colour} />
-          </div>
-        );
-      case "weather":
-        return (
-          <div className="flex items-center justify-center h-40">
-            <WeatherWidget scale={2} />
-          </div>
-        );
-      default:
-        return (
-          <div className="flex items-center justify-center h-40 text-gray-500">
-            Preview not available
-          </div>
-        );
-    }
   };
 
   return (
@@ -115,7 +91,15 @@ const EditWidget: React.FC<Props> = ({
 
       {/* Right: Preview */}
       <div className="flex w-full md:w-1/2 items-center justify-center border rounded-xl bg-gray-400 dark:bg-gray-900">
-        {renderPreview()}
+        <WidgetRenderer
+          widget={{
+            ...widget,
+            customisation: {
+              ...widget.customisation,
+              scale: 2, // 🔒 force scale for preview
+            },
+          }}
+        />
       </div>
     </div>
   );

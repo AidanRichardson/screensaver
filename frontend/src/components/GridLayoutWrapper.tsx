@@ -2,10 +2,10 @@ import React from "react";
 import GridLayout, { Layout, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import { FaEdit } from "react-icons/fa";
-import { baseWidgetSizes, type WidgetConfig } from "../types/widget";
+import { type WidgetConfig } from "../types/widget";
 import WidgetFrame from "./WidgetFrame";
-import ClockWidget from "./widgets/ClockWidget";
-import WeatherWidget from "./widgets/WeatherWidget";
+import WidgetRenderer from "./WidgetRenderer";
+import { widgetRegistry } from "./widgets";
 
 const ResponsiveGridLayout = WidthProvider(GridLayout);
 
@@ -30,17 +30,6 @@ const GridLayoutWrapper: React.FC<Props> = ({
     onWidgetsChange(updated);
   };
 
-  const renderWidget = (widget: WidgetConfig) => {
-    switch (widget.type) {
-      case "clock":
-        return <ClockWidget {...widget.customisation} />;
-      case "weather":
-        return <WeatherWidget {...widget.customisation} />;
-      default:
-        return <div>Unknown widget</div>;
-    }
-  };
-
   return (
     <div className="w-full h-full">
       <ResponsiveGridLayout
@@ -55,7 +44,7 @@ const GridLayoutWrapper: React.FC<Props> = ({
         compactType={null}
       >
         {widgets.map((widget) => {
-          const base = baseWidgetSizes[widget.type];
+          const base = widgetRegistry[widget.type].defaultSize;
           const scale = widget.customisation.scale ?? 1;
 
           const w = base.w * scale;
@@ -77,7 +66,7 @@ const GridLayoutWrapper: React.FC<Props> = ({
                   </button>
                 )}
                 <WidgetFrame editing={editing}>
-                  {renderWidget(widget)}
+                  <WidgetRenderer widget={widget} />
                 </WidgetFrame>
               </div>
             </div>
