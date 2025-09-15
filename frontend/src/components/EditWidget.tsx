@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { WidgetConfig, WidgetScale } from "../types/widget";
+import type { WidgetConfig } from "../types/widget";
 import WidgetRenderer from "./WidgetRenderer";
 
 interface Props {
@@ -15,7 +15,7 @@ const EditWidget: React.FC<Props> = ({
   updateWidgets,
   OnClose,
 }) => {
-  const [scale, setScale] = useState<WidgetScale>(widget.customisation.scale);
+  const [scale, setScale] = useState(widget.customisation.scale);
   const [colour, setColour] = useState(widget.customisation.colour);
 
   const onClick = () => {
@@ -51,12 +51,12 @@ const EditWidget: React.FC<Props> = ({
         </label>
         <select
           value={scale}
-          onChange={(e) => setScale(Number(e.target.value) as WidgetScale)}
+          onChange={(e) => setScale(Number(e.target.value))}
           className="mb-3 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 px-2 py-1 text-sm"
         >
-          <option value={1}>Small</option>
-          <option value={2}>Medium</option>
-          <option value={3}>Large</option>
+          <option value={3}>Small</option>
+          <option value={6}>Medium</option>
+          <option value={8}>Large</option>
         </select>
 
         {/* Colour selector */}
@@ -96,7 +96,7 @@ const EditWidget: React.FC<Props> = ({
             ...widget,
             customisation: {
               ...widget.customisation,
-              scale: 2, // 🔒 force scale for preview
+              scale: 2,
             },
           }}
         />

@@ -9,15 +9,10 @@ const ClockWidget: React.FC<WidgetCustomisation> = ({ scale, colour }) => {
     return () => clearInterval(timer);
   }, []);
 
-  const fontSize = {
-    1: "text-3xl",
-    2: "text-6xl",
-    3: "text-9xl",
-  }[scale];
-
   return (
     <div
-      className={`text-${colour} font-bold font-asimovian ${fontSize} select-none`}
+      className="font-bold font-asimovian select-none"
+      style={{ color: colour, fontSize: `${scale}em` }}
     >
       {time.toLocaleTimeString()}
     </div>

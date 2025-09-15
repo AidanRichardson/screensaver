@@ -1,9 +1,7 @@
 import { widgetRegistry } from "../components/widgets";
 
-export type WidgetScale = 1 | 2 | 3;
-
 export interface WidgetCustomisation {
-  scale: WidgetScale;
+  scale: number;
   colour: string;
 }
 
