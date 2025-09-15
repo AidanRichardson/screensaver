@@ -4,7 +4,7 @@ import json
 
 router = APIRouter()
 
-@router.get("/screens")
+
 @router.get("/screens")
 def get_screens(
     user_id: str = Query("local"),
@@ -52,6 +52,22 @@ def save_screen(
         VALUES (?, ?, ?)
         """,
         (screen_id, user_id, json.dumps(widgets))
+    )
+    db.commit()
+    return {"ok": True}
+
+@router.delete("/screens/{screen_id}")
+def delete_screen(
+    screen_id: int,
+    user_id: str = Query("local"),
+    db=Depends(get_db)
+):
+    cur = db.cursor()
+    cur.execute(
+        """
+        DELETE FROM screens WHERE user_id=? AND screen_id=?;
+        """,
+        (user_id, screen_id)
     )
     db.commit()
     return {"ok": True}

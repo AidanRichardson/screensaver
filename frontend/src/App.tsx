@@ -11,13 +11,16 @@ const API_BASE = "/api/screens";
 
 function App() {
   const [editing, setEditing] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState(1);
+  const [screenIds, setScreenIds] = useState<number[]>([]);
+  const [currentScreen, setCurrentScreen] = useState<number>();
   const [widgets, setWidgets] = useState<WidgetConfig[]>();
   const [showWidgetModal, setShowWidgetModal] = useState(false);
   const [editingWidget, setEditingWidget] = useState<WidgetConfig>();
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
+    if (!currentScreen) return;
+
     const fetchWidgets = async () => {
       try {
         const res = await fetch(`${API_BASE}/${currentScreen}`);
@@ -32,6 +35,26 @@ function App() {
 
     fetchWidgets();
   }, [currentScreen]);
+
+  useEffect(() => {
+    const fetchScreens = async () => {
+      try {
+        const res = await fetch(`${API_BASE}`);
+        if (!res.ok) throw new Error("Failed to fetch screens");
+
+        const data = await res.json();
+        setScreenIds(data.screens);
+
+        if (data.screens.length > 0) {
+          setCurrentScreen(data.screens[0]); // ✅ set immediately
+        }
+      } catch (err) {
+        console.error("Error fetching screens:", err);
+      }
+    };
+
+    fetchScreens();
+  }, []);
 
   useEffect(() => {
     const handleChange = () => {
@@ -77,7 +100,7 @@ function App() {
               Fullscreen
             </button>
           )}
-          {!isFullscreen && (
+          {!isFullscreen && currentScreen !== undefined && (
             <button
               onClick={handleEdit}
               className="px-3 py-1 text-sm font-bold rounded bg-red-500 hover:bg-red-700 text-white shadow"
@@ -103,10 +126,10 @@ function App() {
       {editing && (
         <div className="w-full bg-gray-800 text-white shadow-md z-40">
           <div className="max-w-screen-xl mx-auto px-4 py-3 flex items-center gap-4">
-            {/* Save/Exit Edit */}
-
             {/* Screen selector */}
             <ScreenSelection
+              screens={screenIds}
+              setScreens={setScreenIds}
               currentScreen={currentScreen}
               editing={editing}
               setWidgets={setWidgets}

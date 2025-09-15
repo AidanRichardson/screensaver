@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import type { WidgetConfig } from "../types/widget";
 
 interface Props {
-  currentScreen: number;
+  screens: number[];
+  setScreens: (screens: number[]) => void;
+  currentScreen: number | undefined;
   editing: boolean;
   setWidgets: (widgets: WidgetConfig[]) => void;
   setCurrentScreen: (screens: number) => void;
@@ -10,33 +12,16 @@ interface Props {
 const API_BASE = "/api/screens";
 
 const ScreenSelection: React.FC<Props> = ({
+  screens,
+  setScreens,
   currentScreen,
   editing,
   setWidgets,
   setCurrentScreen,
 }) => {
-  const [screens, setScreens] = useState<number[]>([1]);
-
-  // Fetch available screens
-  useEffect(() => {
-    const fetchScreens = async () => {
-      try {
-        const res = await fetch(`${API_BASE}`);
-        if (!res.ok) throw new Error("Failed to fetch screens");
-
-        const data = await res.json();
-        setScreens(data.screens);
-      } catch (err) {
-        console.error("Error fetching screens:", err);
-      }
-    };
-
-    fetchScreens();
-  }, []);
-
-  // Add a new screen
+  // Add a new screen (id = timestamp)
   const handleAddScreen = async () => {
-    const nextId = screens.length > 0 ? Math.max(...screens) + 1 : 1;
+    const nextId = Date.now();
 
     try {
       const res = await fetch(`${API_BASE}/${nextId}`, {
@@ -54,6 +39,34 @@ const ScreenSelection: React.FC<Props> = ({
     }
   };
 
+  const deleteScreen = async () => {
+    if (editing && currentScreen !== undefined) {
+      try {
+        const res = await fetch(`${API_BASE}/${currentScreen}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        });
+        if (!res.ok) throw new Error("Failed to delete screen");
+
+        setScreens((prevScreens) => {
+          const updated = prevScreens.filter((s) => s !== currentScreen);
+
+          if (updated.length === 0) {
+            setCurrentScreen(Date.now());
+          } else {
+            const sorted = [...updated].sort((a, b) => a - b);
+            const next = sorted.find((s) => s > currentScreen) ?? sorted[0];
+            setCurrentScreen(next);
+          }
+
+          return updated;
+        });
+      } catch (err) {
+        console.error("Server error:", err);
+      }
+    }
+  };
+
   return (
     <div
       className={`${
@@ -61,7 +74,7 @@ const ScreenSelection: React.FC<Props> = ({
       } flex-row flex-wrap items-center gap-3 my-4`}
     >
       <div className="flex flex-row flex-wrap items-center gap-2 dark:bg-gray-800 p-2 rounded-xl shadow-sm">
-        {screens.map((screenId) => (
+        {screens.map((screenId, index) => (
           <button
             key={screenId}
             onClick={() => setCurrentScreen(screenId)}
@@ -72,7 +85,7 @@ const ScreenSelection: React.FC<Props> = ({
                   : "bg-white text-gray-700 hover:bg-yellow-100 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
               }`}
           >
-            Screen {screenId}
+            Screen {index + 1}
           </button>
         ))}
 
@@ -81,6 +94,12 @@ const ScreenSelection: React.FC<Props> = ({
           className="px-4 py-2 rounded-full font-medium bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 shadow-md"
         >
           + Add Screen
+        </button>
+        <button
+          onClick={deleteScreen}
+          className="px-4 py-2 rounded-full font-medium bg-red-500 text-white hover:bg-red-600 transition-colors duration-200 shadow-md"
+        >
+          - Delete Screen
         </button>
       </div>
     </div>
