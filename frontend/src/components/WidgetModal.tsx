@@ -1,11 +1,13 @@
 import React from "react";
 import { availableWidgets, type WidgetConfig } from "../types/widget";
 import AddWidget from "./AddWidget";
+import EditWidget from "./EditWidget";
 
 interface WidgetModalProps {
   open: boolean;
   onClose: () => void;
   widgets: WidgetConfig[];
+  editingWidget: WidgetConfig | undefined;
   updateWidgets: (widgets: WidgetConfig[]) => void;
 }
 
@@ -13,6 +15,7 @@ const WidgetModal: React.FC<WidgetModalProps> = ({
   open,
   onClose,
   widgets,
+  editingWidget,
   updateWidgets,
 }) => {
   if (!open) return null;
@@ -38,25 +41,44 @@ const WidgetModal: React.FC<WidgetModalProps> = ({
           ✖
         </button>
 
-        <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">
-          Add a Widget
-        </h2>
-        {unusedWidgets.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {unusedWidgets.map((widget, index) => (
-              <AddWidget
-                key={index}
-                widgetDetails={widget}
-                widgets={widgets}
-                updateWidgets={updateWidgets}
-                OnClose={onClose}
-              />
-            ))}
-          </div>
+        {unusedWidgets.length > 0 && editingWidget === undefined ? (
+          <>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">
+              Add a Widget
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {unusedWidgets.map((widget, index) => (
+                <AddWidget
+                  key={index}
+                  widgetDetails={widget}
+                  widgets={widgets}
+                  updateWidgets={updateWidgets}
+                  OnClose={onClose}
+                />
+              ))}
+            </div>
+          </>
+        ) : editingWidget === undefined ? (
+          <>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">
+              Add a Widget
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400">
+              All available widgets are already in use.
+            </p>
+          </>
         ) : (
-          <p className="text-gray-500 dark:text-gray-400">
-            All available widgets are already in use.
-          </p>
+          <>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-gray-100">
+              Edit Widget
+            </h2>
+            <EditWidget
+              widget={editingWidget}
+              widgets={widgets}
+              updateWidgets={updateWidgets}
+              OnClose={onClose}
+            />
+          </>
         )}
 
         <div className="flex justify-end mt-6">

@@ -1,10 +1,15 @@
 export type WidgetType = "clock" | "weather" | "spotify";
 export type WidgetScale = 1 | 2 | 3;
 
+export interface WidgetCustomisation {
+  scale: WidgetScale;
+  colour: string;
+}
+
 export interface WidgetConfig {
   id: string;
   type: WidgetType;
-  scale: WidgetScale;
+  customisation: WidgetCustomisation;
   x: number;
   y: number;
   w?: number;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import type { WidgetCustomisation } from "../../types/widget";
 
-const ClockWidget: React.FC<{ scale: number }> = ({ scale }) => {
+const ClockWidget: React.FC<WidgetCustomisation> = ({ scale, colour }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -15,7 +16,9 @@ const ClockWidget: React.FC<{ scale: number }> = ({ scale }) => {
   }[scale];
 
   return (
-    <div className={`text-white font-bold font-asimovian ${fontSize}`}>
+    <div
+      className={`text-${colour} font-bold font-asimovian ${fontSize} select-none`}
+    >
       {time.toLocaleTimeString()}
     </div>
   );

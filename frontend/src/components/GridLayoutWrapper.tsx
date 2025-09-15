@@ -1,6 +1,7 @@
 import React from "react";
 import GridLayout, { Layout, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
+import { FaEdit } from "react-icons/fa";
 import { baseWidgetSizes, type WidgetConfig } from "../types/widget";
 import WidgetFrame from "./WidgetFrame";
 import ClockWidget from "./widgets/ClockWidget";
@@ -11,12 +12,14 @@ const ResponsiveGridLayout = WidthProvider(GridLayout);
 interface Props {
   widgets: WidgetConfig[];
   onWidgetsChange: (widgets: WidgetConfig[]) => void;
+  setEditingWidget: (setEditingWidget: WidgetConfig) => void;
   editing: boolean;
 }
 
 const GridLayoutWrapper: React.FC<Props> = ({
   widgets,
   onWidgetsChange,
+  setEditingWidget,
   editing,
 }) => {
   const handleLayoutChange = (layout: Layout[]) => {
@@ -27,16 +30,12 @@ const GridLayoutWrapper: React.FC<Props> = ({
     onWidgetsChange(updated);
   };
 
-  const handleDelete = (id: string) => {
-    onWidgetsChange(widgets.filter((w) => w.id !== id));
-  };
-
   const renderWidget = (widget: WidgetConfig) => {
     switch (widget.type) {
       case "clock":
-        return <ClockWidget scale={widget.scale} />;
+        return <ClockWidget {...widget.customisation} />;
       case "weather":
-        return <WeatherWidget scale={widget.scale} />;
+        return <WeatherWidget {...widget.customisation} />;
       default:
         return <div>Unknown widget</div>;
     }
@@ -57,7 +56,7 @@ const GridLayoutWrapper: React.FC<Props> = ({
       >
         {widgets.map((widget) => {
           const base = baseWidgetSizes[widget.type];
-          const scale = widget.scale ?? 1;
+          const scale = widget.customisation.scale ?? 1;
 
           const w = base.w * scale;
           const h = base.h * scale;
@@ -71,10 +70,10 @@ const GridLayoutWrapper: React.FC<Props> = ({
                 {editing && (
                   <button
                     type="button"
-                    onClick={() => handleDelete(widget.id)}
+                    onClick={() => setEditingWidget(widget)}
                     className="no-drag absolute top-2 right-2 z-10 bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition"
                   >
-                    ✖
+                    <FaEdit />
                   </button>
                 )}
                 <WidgetFrame editing={editing}>

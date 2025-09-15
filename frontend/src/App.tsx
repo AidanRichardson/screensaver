@@ -14,6 +14,7 @@ function App() {
   const [currentScreen, setCurrentScreen] = useState(1);
   const [widgets, setWidgets] = useState<WidgetConfig[]>();
   const [showWidgetModal, setShowWidgetModal] = useState(false);
+  const [editingWidget, setEditingWidget] = useState<WidgetConfig>();
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -129,8 +130,12 @@ function App() {
       )}
 
       <WidgetModal
-        open={showWidgetModal}
-        onClose={() => setShowWidgetModal(false)}
+        open={showWidgetModal || editingWidget !== undefined}
+        onClose={() => {
+          setEditingWidget(undefined);
+          setShowWidgetModal(false);
+        }}
+        editingWidget={editingWidget}
         widgets={widgets || []}
         updateWidgets={setWidgets}
       />
@@ -139,6 +144,7 @@ function App() {
       <main className="flex-1">
         {widgets && (
           <GridLayoutWrapper
+            setEditingWidget={setEditingWidget}
             widgets={widgets}
             onWidgetsChange={setWidgets}
             editing={editing}
