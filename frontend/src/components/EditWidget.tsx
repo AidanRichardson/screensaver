@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import type { WidgetConfig } from "../types/widget";
 import WidgetRenderer from "./WidgetRenderer";
 
@@ -17,6 +17,10 @@ const EditWidget: React.FC<Props> = ({
 }) => {
   const [scale, setScale] = useState(widget.customisation.scale);
   const [colour, setColour] = useState(widget.customisation.colour);
+  const [location, setLocation] = useState(widget.customisation.location);
+
+  // keep a ref for the input field (uncontrolled)
+  const locationRef = useRef<HTMLInputElement>(null);
 
   const onClick = () => {
     const updatedWidget = {
@@ -25,6 +29,7 @@ const EditWidget: React.FC<Props> = ({
         ...widget.customisation,
         scale,
         colour,
+        location,
       },
     };
 
@@ -72,6 +77,21 @@ const EditWidget: React.FC<Props> = ({
           <option value={"black"}>Black</option>
         </select>
 
+        {widget.type === "weather" && (
+          <>
+            <label className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
+              Location
+            </label>
+            <input
+              defaultValue={location}
+              ref={locationRef}
+              onBlur={() => setLocation(locationRef.current?.value ?? location)}
+              className="mb-4 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 px-2 py-1 text-sm"
+              type="text"
+            />
+          </>
+        )}
+
         {/* Buttons */}
         <div className="mt-auto flex gap-2">
           <button
@@ -96,7 +116,9 @@ const EditWidget: React.FC<Props> = ({
             ...widget,
             customisation: {
               ...widget.customisation,
+              colour: colour,
               scale: 2,
+              location: location, // preview updates only when committed
             },
           }}
         />
