@@ -88,7 +88,7 @@ function App() {
   };
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden flex flex-col">
+    <div className="relative w-screen h-screen overflow-auto flex flex-col">
       {/* Edit and Fullscreen button */}
       {!editing && (
         <div className="fixed top-2 left-2 z-50 flex gap-2">

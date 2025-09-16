@@ -12,7 +12,7 @@ const ClockWidget: React.FC<WidgetCustomisation> = ({ scale, colour }) => {
   return (
     <div
       className="font-bold font-asimovian select-none"
-      style={{ color: colour, fontSize: `${scale}em` }}
+      style={{ color: colour, fontSize: `${scale * 3}em` }}
     >
       {time.toLocaleTimeString()}
     </div>

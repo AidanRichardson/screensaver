@@ -3,7 +3,6 @@ import { widgetRegistry } from "../components/widgets";
 export interface WidgetCustomisation {
   scale: number;
   colour: string;
-  location: string;
 }
 
 export interface WidgetConfig {

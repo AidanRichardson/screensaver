@@ -1,5 +1,5 @@
 export const widgetMeta = {
   type: "clock",
-  defaultSize: { w: 0.65, h: 0.45 },
-  defaultCustomisation: { scale: 3, colour: "white" },
+  defaultSize: { w: 2, h: 1.1 },
+  defaultCustomisation: { scale: 1, colour: "white" },
 };

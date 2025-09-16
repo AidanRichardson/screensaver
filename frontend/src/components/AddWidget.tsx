@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import type { WidgetConfig } from "../types/widget";
 import WidgetRenderer from "./WidgetRenderer";
 
@@ -15,8 +15,6 @@ const AddWidget: React.FC<Props> = ({
   updateWidgets,
   OnClose,
 }) => {
-  const [scale, setScale] = useState(3);
-
   const onClick = () => {
     updateWidgets([
       ...widgets,
@@ -26,7 +24,7 @@ const AddWidget: React.FC<Props> = ({
         y: 0,
         customisation: {
           ...widgetDetails.customisation,
-          scale,
+          scale: 1,
           colour: "white",
         },
       },
@@ -49,17 +47,6 @@ const AddWidget: React.FC<Props> = ({
           {widgetDetails.type.charAt(0).toUpperCase() +
             widgetDetails.type.slice(1)}
         </p>
-
-        {/* Scale selector */}
-        <select
-          value={scale}
-          onChange={(e) => setScale(Number(e.target.value))}
-          className="mb-3 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 px-2 py-1 text-sm"
-        >
-          <option value={3}>Small</option>
-          <option value={6}>Medium</option>
-          <option value={8}>Large</option>
-        </select>
 
         <button
           onClick={onClick}

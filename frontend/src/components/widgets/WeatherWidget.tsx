@@ -16,6 +16,8 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
   const [isDay, setIsDay] = useState<boolean | null>(null);
 
+  scale = scale * 3;
+
   useEffect(() => {
     const fetchWeather = async () => {
       try {
@@ -75,7 +77,7 @@ const WeatherWidget: React.FC<WeatherWidgetProps> = ({
             className={`wi ${getWeatherIconClass(weatherCode)}`}
             style={{
               fontSize: `${scale * 1.6}em`,
-              lineHeight: 1.3,
+              lineHeight: 1.2,
               display: "block",
             }}
           ></i>

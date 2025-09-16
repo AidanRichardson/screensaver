@@ -59,9 +59,9 @@ const EditWidget: React.FC<Props> = ({
           onChange={(e) => setScale(Number(e.target.value))}
           className="mb-3 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 px-2 py-1 text-sm"
         >
-          <option value={3}>Small</option>
-          <option value={6}>Medium</option>
-          <option value={8}>Large</option>
+          <option value={1}>Small</option>
+          <option value={2}>Medium</option>
+          <option value={3}>Large</option>
         </select>
 
         {/* Colour selector */}
@@ -117,7 +117,7 @@ const EditWidget: React.FC<Props> = ({
             customisation: {
               ...widget.customisation,
               colour: colour,
-              scale: 2,
+              scale: 1,
               location: location, // preview updates only when committed
             },
           }}

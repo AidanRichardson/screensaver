@@ -27,6 +27,7 @@ const GridLayoutWrapper: React.FC<Props> = ({
       const l = layout.find((item) => item.i === widget.id);
       return l ? { ...widget, ...l } : widget;
     });
+    console.log(updated);
     onWidgetsChange(updated);
   };
 
@@ -40,7 +41,8 @@ const GridLayoutWrapper: React.FC<Props> = ({
         isDraggable={editing}
         isResizable={false}
         draggableCancel=".no-drag"
-        autoSize={true}
+        maxRows={Infinity}
+        preventCollision={true}
         compactType={null}
       >
         {widgets.map((widget) => {

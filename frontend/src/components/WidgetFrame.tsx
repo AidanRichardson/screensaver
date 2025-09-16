@@ -6,7 +6,7 @@ interface Props {
 }
 
 const WidgetFrame: React.FC<Props> = ({ editing, children }) => {
-  const base = "w-full h-full flex items-center justify-center";
+  const base = "w-full h-full flex items-center text-center justify-center";
 
   if (editing) {
     return (
