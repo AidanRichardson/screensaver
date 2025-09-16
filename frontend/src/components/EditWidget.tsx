@@ -18,6 +18,9 @@ const EditWidget: React.FC<Props> = ({
   const [scale, setScale] = useState(widget.customisation.scale);
   const [colour, setColour] = useState(widget.customisation.colour);
   const [location, setLocation] = useState(widget.customisation.location);
+  const [showPlayingDetails, setShowPlayingDetails] = useState(
+    widget.customisation.showPlayingDetails
+  );
 
   // keep a ref for the input field (uncontrolled)
   const locationRef = useRef<HTMLInputElement>(null);
@@ -30,6 +33,7 @@ const EditWidget: React.FC<Props> = ({
         scale,
         colour,
         location,
+        showPlayingDetails,
       },
     };
 
@@ -92,8 +96,37 @@ const EditWidget: React.FC<Props> = ({
           </>
         )}
 
+        {widget.type === "spotify" && (
+          <div className="mb-4 flex items-center gap-3">
+            <label
+              htmlFor="show-details"
+              className="text-sm font-medium text-gray-600 dark:text-gray-300"
+            >
+              Show Details
+            </label>
+            <button
+              type="button"
+              id="show-details"
+              role="switch"
+              aria-checked={showPlayingDetails}
+              onClick={() => setShowPlayingDetails(!showPlayingDetails)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                showPlayingDetails
+                  ? "bg-blue-600"
+                  : "bg-gray-300 dark:bg-gray-700"
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  showPlayingDetails ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
+        )}
+
         {/* Buttons */}
-        <div className="mt-auto flex gap-2">
+        <div className="flex gap-2">
           <button
             onClick={onClick}
             className="flex-1 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
@@ -118,7 +151,8 @@ const EditWidget: React.FC<Props> = ({
               ...widget.customisation,
               colour: colour,
               scale: 1,
-              location: location, // preview updates only when committed
+              location: location,
+              showPlayingDetails: showPlayingDetails,
             },
           }}
         />
