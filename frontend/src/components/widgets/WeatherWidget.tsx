@@ -63,8 +63,13 @@ const WeatherWidget: React.FC<WidgetCustomisation> = ({
 
   return (
     <div
-      style={{ color: colour }}
-      className="flex flex-col items-center leading-none"
+      className="flex flex-col items-center pl-6 pr-6 pb-3 rounded-3xl shadow-xl backdrop-blur-lg bg-white/10 border border-white/20"
+      style={{
+        color: colour,
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))",
+        boxShadow: `inset 0 4px 8px rgba(255,255,255,0.1), 0 8px 16px rgba(0,0,0,0.3)`,
+      }}
     >
       {temp !== null ? (
         <>

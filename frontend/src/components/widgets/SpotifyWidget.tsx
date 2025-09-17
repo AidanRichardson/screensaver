@@ -103,7 +103,14 @@ const SpotifyWidget: React.FC<WidgetCustomisation> = ({
 
   if (!isAuthenticated) {
     return (
-      <div className="flex items-center justify-center bg-black text-white p-4 rounded-xl shadow-lg h-full">
+      <div
+        className="flex flex-col items-center p-4 rounded-3xl shadow-xl backdrop-blur-lg bg-white/10 border border-white/20"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))",
+          boxShadow: `inset 0 4px 8px rgba(255,255,255,0.1), 0 8px 16px rgba(0,0,0,0.3)`,
+        }}
+      >
         <a
           href="/api/spotifyauth/login"
           className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg font-bold text-white"
@@ -116,7 +123,14 @@ const SpotifyWidget: React.FC<WidgetCustomisation> = ({
 
   if (!track) {
     return (
-      <div className="flex flex-col items-center justify-center text-white p-4 rounded-xl">
+      <div
+        className="flex flex-col items-center p-4 rounded-3xl shadow-xl backdrop-blur-lg bg-white/10 border border-white/20"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))",
+          boxShadow: `inset 0 4px 8px rgba(255,255,255,0.1), 0 8px 16px rgba(0,0,0,0.3)`,
+        }}
+      >
         <img src={"https://tham.ink/nowplaying/album.png"} alt="album" />
         <div style={{ color: colour }}>
           <h4 className="font-bold">Nothing Playing...</h4>
@@ -146,24 +160,37 @@ const SpotifyWidget: React.FC<WidgetCustomisation> = ({
         />
       </div>
 
-      {/* Progress bar with dominant colour */}
-      <div className="w-5/6 h-1 bg-white rounded-full overflow-hidden my-2">
-        <div
-          className="h-1 rounded-full"
-          style={{
-            width: `${progressPercent}%`,
-            backgroundColor: dominantColour,
-          }}
-        />
-      </div>
-
       {showPlayingDetails && (
-        <div className="text-center mt-1" style={{ color: colour }}>
-          <h4 className="font-semibold text-sm truncate">{track.name}</h4>
-          <p className="text-xs text-gray-200 truncate">
-            {track.artists.map((a) => a.name).join(", ")}
-          </p>
-        </div>
+        <>
+          <div className="w-5/6 h-1 bg-black rounded-full overflow-hidden my-2">
+            <div
+              className="h-1 rounded-full"
+              style={{
+                width: `${progressPercent}%`,
+                backgroundColor: dominantColour,
+              }}
+            />
+          </div>
+
+          <div className="text-center mt-1" style={{ color: colour }}>
+            <h4
+              className="font-semibold truncate"
+              style={{
+                fontSize: `${scale / 2}em`,
+              }}
+            >
+              {track.name}
+            </h4>
+            <p
+              className="text-s truncate"
+              style={{
+                fontSize: `${scale / 3}em`,
+              }}
+            >
+              {track.artists.map((a) => a.name).join(", ")}
+            </p>
+          </div>
+        </>
       )}
     </div>
   );
