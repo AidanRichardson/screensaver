@@ -130,13 +130,26 @@ const SpotifyWidget: React.FC<WidgetCustomisation> = ({
     : 0;
 
   return (
-    <div className="flex flex-col items-center justify-center text-white p-4 rounded-xl w-full">
-      <img src={track.album.images[0].url} alt="album" className="mb-1" />
+    <div
+      className="flex flex-col items-center p-4 rounded-3xl shadow-xl backdrop-blur-lg bg-white/10 border border-white/20"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))",
+        boxShadow: `inset 0 4px 8px rgba(255,255,255,0.1), 0 8px 16px rgba(0,0,0,0.3)`,
+      }}
+    >
+      <div className="relative w-full flex justify-center mb-2">
+        <img
+          src={track.album.images[0].url}
+          alt="album"
+          className="rounded-xl shadow-lg object-cover"
+        />
+      </div>
 
       {/* Progress bar with dominant colour */}
-      <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+      <div className="w-5/6 h-1 bg-white rounded-full overflow-hidden my-2">
         <div
-          className="h-2 rounded-full"
+          className="h-1 rounded-full"
           style={{
             width: `${progressPercent}%`,
             backgroundColor: dominantColour,
@@ -145,9 +158,9 @@ const SpotifyWidget: React.FC<WidgetCustomisation> = ({
       </div>
 
       {showPlayingDetails && (
-        <div style={{ color: colour }} className="w-full text-center">
-          <h4 className="font-bold">{track.name}</h4>
-          <p className="text-sm">
+        <div className="text-center mt-1" style={{ color: colour }}>
+          <h4 className="font-semibold text-sm truncate">{track.name}</h4>
+          <p className="text-xs text-gray-200 truncate">
             {track.artists.map((a) => a.name).join(", ")}
           </p>
         </div>
