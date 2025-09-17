@@ -71,7 +71,7 @@ const EditWidget: React.FC<Props> = ({
           onChange={(e) => setScale(Number(e.target.value))}
           className="mb-3 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900 px-2 py-1 text-sm"
         >
-          <option value={1}>Small</option>
+          {widget.type !== "spotify" && <option value={1}>Small</option>}
           <option value={2}>Medium</option>
           <option value={3}>Large</option>
         </select>
