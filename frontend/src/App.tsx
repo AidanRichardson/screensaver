@@ -119,7 +119,7 @@ function App() {
         playsInline
         className="fixed inset-0 w-full h-full object-cover -z-10"
       >
-        <source src={bgVideo} type="video/mp4" />
+        <source src={"https://motionbgs.com/dl/4k/5005"} type="video/mp4" />
       </video>
 
       {/* Navigation bar (appears when editing) */}

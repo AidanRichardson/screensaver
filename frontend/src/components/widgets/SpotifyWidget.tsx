@@ -1,5 +1,6 @@
 import { FastAverageColor } from "fast-average-color";
 import React, { useEffect, useRef, useState } from "react";
+import type { WidgetCustomisation } from "../../types/widget";
 
 interface SpotifyTrack {
   name: string;
@@ -14,13 +15,7 @@ interface SpotifyResponse {
   is_playing: boolean;
 }
 
-interface SpotifyWidgetProps {
-  scale: number;
-  colour: string;
-  showPlayingDetails: boolean;
-}
-
-const SpotifyWidget: React.FC<SpotifyWidgetProps> = ({
+const SpotifyWidget: React.FC<WidgetCustomisation> = ({
   scale,
   colour,
   showPlayingDetails,

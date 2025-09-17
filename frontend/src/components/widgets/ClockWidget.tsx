@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import type { WidgetCustomisation } from "../../types/widget";
 
-const ClockWidget: React.FC<WidgetCustomisation> = ({ scale, colour }) => {
+const ClockWidget: React.FC<WidgetCustomisation> = ({
+  scale,
+  colour,
+  showSeconds,
+  clockFont,
+}) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -9,12 +14,22 @@ const ClockWidget: React.FC<WidgetCustomisation> = ({ scale, colour }) => {
     return () => clearInterval(timer);
   }, []);
 
+  const timeString = time.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: showSeconds ? "2-digit" : undefined,
+  });
+
   return (
     <div
-      className="font-bold font-asimovian select-none"
-      style={{ color: colour, fontSize: `${scale * 3}em` }}
+      className="font-bold select-none"
+      style={{
+        color: colour,
+        fontFamily: clockFont,
+        fontSize: `${scale * 3.5}em`,
+      }}
     >
-      {time.toLocaleTimeString()}
+      {timeString}
     </div>
   );
 };

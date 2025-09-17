@@ -3,8 +3,10 @@ import { widgetRegistry } from "../components/widgets";
 export interface WidgetCustomisation {
   scale: number;
   colour: string;
+  showSeconds: boolean;
   location: string;
   showPlayingDetails: boolean;
+  clockFont: string;
 }
 
 export interface WidgetConfig {

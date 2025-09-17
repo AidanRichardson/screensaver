@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "weather-icons/css/weather-icons.css";
+import type { WidgetCustomisation } from "../../types/widget";
 
-interface WeatherWidgetProps {
-  scale: number;
-  colour: string;
-  location: string;
-}
-
-const WeatherWidget: React.FC<WeatherWidgetProps> = ({
+const WeatherWidget: React.FC<WidgetCustomisation> = ({
   scale,
   colour,
   location,

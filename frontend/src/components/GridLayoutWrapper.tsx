@@ -27,7 +27,6 @@ const GridLayoutWrapper: React.FC<Props> = ({
       const l = layout.find((item) => item.i === widget.id);
       return l ? { ...widget, ...l } : widget;
     });
-    console.log(updated);
     onWidgetsChange(updated);
   };
 
