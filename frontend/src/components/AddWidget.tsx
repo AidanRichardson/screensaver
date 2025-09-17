@@ -24,8 +24,6 @@ const AddWidget: React.FC<Props> = ({
         y: 0,
         customisation: {
           ...widgetDetails.customisation,
-          scale: 1,
-          colour: "white",
         },
       },
     ]);
@@ -36,17 +34,11 @@ const AddWidget: React.FC<Props> = ({
     <>
       <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col">
         {/* Preview */}
-        <div className="mb-3">
+        <div className="mb-20">
           <div className="flex items-center justify-center h-20">
             <WidgetRenderer widget={widgetDetails} />
           </div>
         </div>
-
-        {/* Name */}
-        <p className="text-lg font-medium text-gray-700 dark:text-gray-200 mb-2">
-          {widgetDetails.type.charAt(0).toUpperCase() +
-            widgetDetails.type.slice(1)}
-        </p>
 
         <button
           onClick={onClick}
